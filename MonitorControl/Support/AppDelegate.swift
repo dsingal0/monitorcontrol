@@ -44,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       menuslidersPrefsVc!,
       keyboardPrefsVc!,
       displaysPrefsVc!,
-      layoutPrefsVc!,
+      layoutPrefsVc,
       aboutPrefsVc!,
     ],
     style: self.settingsPaneStyle,
@@ -71,7 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   @objc func quitClicked(_: AnyObject) {
     os_log("Quit clicked", type: .info)
-    menu.closeMenu()
+    menuHandler.closeMenu()
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       NSApplication.shared.terminate(self)
     }
@@ -163,7 +163,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func updateMenusAndKeys() {
-    menu.updateMenus()
+    menuHandler.updateMenus()
     self.updateMediaKeyTap()
   }
 
@@ -345,10 +345,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   private func setMenu() {
-    menu = MenuHandler()
-    menu.delegate = menu
+    menuHandler = MenuHandler()
+    menuHandler.delegate = menuHandler
     self.statusItem.button?.image = NSImage(named: "status")
-    self.statusItem.menu = menu
+    self.statusItem.menu = menuHandler
   }
 
   private func showSafeModeAlertIfNeeded() {

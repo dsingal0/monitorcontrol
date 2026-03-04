@@ -167,7 +167,7 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
       guard !name.isEmpty else { return }
       _ = LayoutManager.shared.saveCurrentLayout(name: name)
       self.loadLayoutList()
-      menu.updateMenus()
+      menuHandler.updateMenus()
     }
   }
   
@@ -189,7 +189,7 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
       LayoutManager.shared.deleteLayout(layout)
       self.loadLayoutList()
       self.updateButtons()
-      menu.updateMenus()
+      menuHandler.updateMenus()
     }
   }
   
@@ -201,7 +201,7 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
     do {
       try LayoutManager.shared.applyLayout(layout)
       self.loadLayoutList()
-      menu.updateMenus()
+      menuHandler.updateMenus()
     } catch {
       let alert = NSAlert()
       alert.messageText = NSLocalizedString("Failed to apply layout", comment: "Alert title")

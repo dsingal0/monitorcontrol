@@ -15,7 +15,7 @@ let MIN_PREVIOUS_BUILD_NUMBER = 6262
 
 // App
 var app: AppDelegate!
-var menu: MenuHandler!
+var menuHandler: MenuHandler!
 
 let prefs = UserDefaults.standard
 

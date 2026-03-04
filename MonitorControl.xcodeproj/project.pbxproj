@@ -777,23 +777,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAB2F642273ED0C7004AB5A4 /* .github in Resources */,
-				AAB2F63E273ED0AD004AB5A4 /* .swiftformat in Resources */,
 				56754EB11D9A4016007BCDC5 /* Assets.xcassets in Resources */,
 				6CDA0FCF26485A8300F52125 /* Main.storyboard in Resources */,
-				AAB2F640273ED0B8004AB5A4 /* .bartycrouch.toml in Resources */,
 				8C1741852707B91100E88D53 /* InternetAccessPolicy.plist in Resources */,
-				AAB2F638273ED099004AB5A4 /* .swiftlint.yml in Resources */,
-				AAB2F63C273ED0AD004AB5A4 /* .swift-version in Resources */,
-				45A874852F57DC39009829E8 /* Info.plist in Resources */,
-				45A874862F57DC39009829E8 /* Main.storyboard in Resources */,
-				45A874872F57DC39009829E8 /* InternetAccessPolicy.strings in Resources */,
-				45A874882F57DC39009829E8 /* Assets.xcassets in Resources */,
-				45A874892F57DC39009829E8 /* InternetAccessPolicy.plist in Resources */,
-				45A8748A2F57DC39009829E8 /* Localizable.strings in Resources */,
 				AA3B4A2826AE103C00B74CD2 /* README.md in Resources */,
 				F01B0699228221B7008E64DB /* Localizable.strings in Resources */,
-				AAB2F63D273ED0AD004AB5A4 /* .gitignore in Resources */,
 				8C1741882707B91F00E88D53 /* InternetAccessPolicy.strings in Resources */,
 				AAB2F644273ED0E9004AB5A4 /* License.txt in Resources */,
 			);
