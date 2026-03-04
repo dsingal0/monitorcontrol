@@ -143,3 +143,4 @@ git clone https://github.com/MonitorControl/MonitorControl.git
 - [@kfix](https://github.com/kfix/ddcctl) (for ddcctl)
 - [@reitermarkus](https://github.com/reitermarkus) (for Intel DDC support)
 - [javierocasio](https://www.deviantart.com/javierocasio) (app icon background)
+# monitorcontrol
