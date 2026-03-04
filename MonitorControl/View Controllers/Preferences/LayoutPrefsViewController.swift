@@ -82,10 +82,17 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
     contentView.addSubview(deleteButton)
     
     self.view = contentView
+    self.preferredContentSize = NSSize(width: 600, height: 400)
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.updateButtons()
+  }
+
+  override func viewWillAppear() {
+    super.viewWillAppear()
+    self.loadLayoutList()
     self.updateButtons()
   }
   
@@ -165,6 +172,13 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
     if response == .alertFirstButtonReturn {
       let name = textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
       guard !name.isEmpty else { return }
+      if LayoutManager.shared.layouts.contains(where: { $0.name == name }) {
+        let dupeAlert = NSAlert()
+        dupeAlert.messageText = NSLocalizedString("Name Already Exists", comment: "Alert title")
+        dupeAlert.informativeText = String(format: NSLocalizedString("A layout named '%@' already exists. Please choose a different name.", comment: "Alert message"), name)
+        dupeAlert.runModal()
+        return
+      }
       _ = LayoutManager.shared.saveCurrentLayout(name: name)
       self.loadLayoutList()
       menuHandler.updateMenus()
@@ -174,16 +188,24 @@ class LayoutPrefsViewController: NSViewController, SettingsPane, NSTableViewData
   @objc func deleteLayoutClicked(_ sender: NSButton) {
     let selectedRow = self.layoutList.selectedRow
     guard selectedRow >= 0 && selectedRow < LayoutManager.shared.layouts.count else { return }
-    
+
     let layout = LayoutManager.shared.layouts[selectedRow]
-    
+
+    if layout.isDefault {
+      let alert = NSAlert()
+      alert.messageText = NSLocalizedString("Cannot Delete Default Layout", comment: "Alert title")
+      alert.informativeText = NSLocalizedString("The default layout cannot be deleted.", comment: "Alert message")
+      alert.runModal()
+      return
+    }
+
     let alert = NSAlert()
     alert.messageText = NSLocalizedString("Delete Layout", comment: "Alert title")
     alert.informativeText = String(format: NSLocalizedString("Are you sure you want to delete the layout '%@'?", comment: "Alert message"), layout.name)
     alert.addButton(withTitle: NSLocalizedString("Delete", comment: "Button"))
     alert.addButton(withTitle: NSLocalizedString("Cancel", comment: "Button"))
     alert.alertStyle = .warning
-    
+
     let response = alert.runModal()
     if response == .alertFirstButtonReturn {
       LayoutManager.shared.deleteLayout(layout)

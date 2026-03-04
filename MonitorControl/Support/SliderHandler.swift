@@ -14,17 +14,21 @@ class SliderHandler {
   var icon: ClickThroughImageView?
 
   class MCSliderCell: NSSliderCell {
-    let knobFillColor = NSColor(white: 1, alpha: 1)
-    let knobFillColorTracking = NSColor(white: 0.8, alpha: 1)
-    let knobStrokeColor = NSColor.systemGray.withAlphaComponent(0.5)
-    let knobShadowColor = NSColor(white: 0, alpha: 0.03)
-    let barFillColor = NSColor.systemGray.withAlphaComponent(0.2)
-    let barStrokeColor = NSColor.systemGray.withAlphaComponent(0.5)
-    let barFilledFillColor = NSColor(white: 1, alpha: 1)
+    private var isDarkMode: Bool {
+      NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+    }
+
+    var knobFillColor: NSColor { .white }
+    var knobFillColorTracking: NSColor { NSColor(white: 0.9, alpha: 1) }
+    var knobStrokeColor: NSColor { isDarkMode ? NSColor.white.withAlphaComponent(0.3) : NSColor(white: 0, alpha: 0.15) }
+    var knobShadowColor: NSColor { isDarkMode ? .clear : NSColor(white: 0, alpha: 0.1) }
+    var barFillColor: NSColor { isDarkMode ? NSColor.white.withAlphaComponent(0.15) : NSColor(white: 0, alpha: 0.1) }
+    var barStrokeColor: NSColor { isDarkMode ? NSColor.white.withAlphaComponent(0.08) : NSColor(white: 0, alpha: 0.06) }
+    var barFilledFillColor: NSColor { NSColor.controlAccentColor }
     let highlightDisplayIndicatorColor = NSColor(white: 0.85, alpha: 1) // This is visible if there is more the 2 displays
     let tickMarkColor = NSColor.systemGray.withAlphaComponent(0.5)
 
-    let inset: CGFloat = 3.5
+    let inset: CGFloat = 1.0
     let offsetX: CGFloat = -1.5
     let offsetY: CGFloat = -1.5
 
@@ -232,7 +236,7 @@ class SliderHandler {
       let icon = SliderHandler.ClickThroughImageView()
       icon.image = NSImage(systemSymbolName: iconName, accessibilityDescription: title)
       icon.contentTintColor = NSColor.black.withAlphaComponent(0.6)
-      icon.frame = NSRect(x: view.frame.origin.x + 6.5, y: view.frame.origin.y + 13, width: 15, height: 15)
+      icon.frame = NSRect(x: view.frame.origin.x + 6.5, y: view.frame.origin.y + 7, width: 15, height: 15)
       icon.imageAlignment = .alignCenter
       view.addSubview(slider)
       view.addSubview(icon)

@@ -39,7 +39,6 @@
 		45A8745B2F57DC39009829E8 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873E82F57DC39009829E8 /* LayoutManager.swift */; };
 		45A8745C2F57DC39009829E8 /* Arm64DDC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873E22F57DC39009829E8 /* Arm64DDC.swift */; };
 		45A8745D2F57DC39009829E8 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873D32F57DC39009829E8 /* Command.swift */; };
-		45A8745E2F57DC39009829E8 /* UpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873ED2F57DC39009829E8 /* UpdaterDelegate.swift */; };
 		45A8745F2F57DC39009829E8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 45A874392F57DC39009829E8 /* Info.plist */; };
 		45A874602F57DC39009829E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45A8742B2F57DC39009829E8 /* Main.storyboard */; };
 		45A874612F57DC39009829E8 /* InternetAccessPolicy.strings in Resources */ = {isa = PBXBuildFile; fileRef = 45A874022F57DC39009829E8 /* InternetAccessPolicy.strings */; };
@@ -77,7 +76,6 @@
 		45A874812F57DC39009829E8 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873E82F57DC39009829E8 /* LayoutManager.swift */; };
 		45A874822F57DC39009829E8 /* Arm64DDC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873E22F57DC39009829E8 /* Arm64DDC.swift */; };
 		45A874832F57DC39009829E8 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873D32F57DC39009829E8 /* Command.swift */; };
-		45A874842F57DC39009829E8 /* UpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A873ED2F57DC39009829E8 /* UpdaterDelegate.swift */; };
 		45A874852F57DC39009829E8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 45A874392F57DC39009829E8 /* Info.plist */; };
 		45A874862F57DC39009829E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45A8742B2F57DC39009829E8 /* Main.storyboard */; };
 		45A874872F57DC39009829E8 /* InternetAccessPolicy.strings in Resources */ = {isa = PBXBuildFile; fileRef = 45A874022F57DC39009829E8 /* InternetAccessPolicy.strings */; };
@@ -109,8 +107,6 @@
 		AA473EB126DFF8DE0063A181 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA473EB026DFF8DE0063A181 /* Command.swift */; };
 		AA5314C426EBF5170041D178 /* PrefKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5314C326EBF5170041D178 /* PrefKey.swift */; };
 		AA665A5D26C5892800FEF2C1 /* AboutPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA665A5C26C5892800FEF2C1 /* AboutPrefsViewController.swift */; };
-		AA70817C27046B9800CC5625 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = AA70817B27046B9800CC5625 /* Sparkle */; };
-		AA78BDBD2709FE7B00CA8DF7 /* UpdaterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78BDBC2709FE7B00CA8DF7 /* UpdaterDelegate.swift */; };
 		AA99521726FE25AB00612E07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA99521626FE25AB00612E07 /* AppDelegate.swift */; };
 		AA99521926FE49A300612E07 /* MenuHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA99521826FE49A300612E07 /* MenuHandler.swift */; };
 		AA9AE86F26B5BF3D00B6CA65 /* OSD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA9AE86E26B5BF3D00B6CA65 /* OSD.framework */; };
@@ -183,7 +179,6 @@
 		45A873EA2F57DC39009829E8 /* MenuHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHandler.swift; sourceTree = "<group>"; };
 		45A873EB2F57DC39009829E8 /* OSDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSDUtils.swift; sourceTree = "<group>"; };
 		45A873EC2F57DC39009829E8 /* SliderHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderHandler.swift; sourceTree = "<group>"; };
-		45A873ED2F57DC39009829E8 /* UpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterDelegate.swift; sourceTree = "<group>"; };
 		45A873EF2F57DC39009829E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
 		45A873F02F57DC39009829E8 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
 		45A873F12F57DC39009829E8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
@@ -290,7 +285,6 @@
 		AA473EB026DFF8DE0063A181 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		AA5314C326EBF5170041D178 /* PrefKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefKey.swift; sourceTree = "<group>"; };
 		AA665A5C26C5892800FEF2C1 /* AboutPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPrefsViewController.swift; sourceTree = "<group>"; };
-		AA78BDBC2709FE7B00CA8DF7 /* UpdaterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterDelegate.swift; sourceTree = "<group>"; };
 		AA90101E27C56A0E00CC1DF7 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Main.strings; sourceTree = "<group>"; };
 		AA90101F27C56A0E00CC1DF7 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InternetAccessPolicy.strings; sourceTree = "<group>"; };
 		AA90102027C56A0E00CC1DF7 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -360,7 +354,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA9AE87126B5BFB700B6CA65 /* CoreDisplay.framework in Frameworks */,
-				AA70817C27046B9800CC5625 /* Sparkle in Frameworks */,
 				AA44E703270377C200E06865 /* KeyboardShortcuts in Frameworks */,
 				6CD35F53264FFFC6001F1344 /* SimplyCoreAudio in Frameworks */,
 				6CD35F5626500008001F1344 /* MediaKeyTap in Frameworks */,
@@ -448,7 +441,6 @@
 				45A873EA2F57DC39009829E8 /* MenuHandler.swift */,
 				45A873EB2F57DC39009829E8 /* OSDUtils.swift */,
 				45A873EC2F57DC39009829E8 /* SliderHandler.swift */,
-				45A873ED2F57DC39009829E8 /* UpdaterDelegate.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -592,7 +584,6 @@
 			children = (
 				F01B0685228221B6008E64DB /* Bridging-Header.h */,
 				AA99521626FE25AB00612E07 /* AppDelegate.swift */,
-				AA78BDBC2709FE7B00CA8DF7 /* UpdaterDelegate.swift */,
 				AA99521826FE49A300612E07 /* MenuHandler.swift */,
 				F01B068F228221B7008E64DB /* SliderHandler.swift */,
 				6C85EFD922C941B000227EA1 /* DisplayManager.swift */,
@@ -679,7 +670,6 @@
 				6CD35F52264FFFC6001F1344 /* SimplyCoreAudio */,
 				6CD35F5526500008001F1344 /* MediaKeyTap */,
 				AA44E702270377C200E06865 /* KeyboardShortcuts */,
-				AA70817B27046B9800CC5625 /* Sparkle */,
 				AAD7DD332CAFF3D90062822F /* Settings */,
 			);
 			productName = MonitorControl.OSX;
@@ -760,7 +750,6 @@
 				6CD35F5426500008001F1344 /* XCRemoteSwiftPackageReference "MediaKeyTap" */,
 				6CD35F5A2650003F001F1344 /* XCRemoteSwiftPackageReference "Settings" */,
 				AA44E701270377C200E06865 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
-				AA70817A27046B9800CC5625 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 56754EAC1D9A4016007BCDC5 /* Products */;
 			projectDirPath = "";
@@ -916,7 +905,6 @@
 				6CBFE27A23DB266000D1BC41 /* Display.swift in Sources */,
 				AA44E70727038F7F00E06865 /* KeyboardShortcutsManager.swift in Sources */,
 				F03A8DF21FFBAA6F0034DC27 /* OtherDisplay.swift in Sources */,
-				AA78BDBD2709FE7B00CA8DF7 /* UpdaterDelegate.swift in Sources */,
 				AA44E7052703790100E06865 /* KeyboardShortcuts+Extension.swift in Sources */,
 				F0A489C4279C71B200BEDFD6 /* OnboardingViewController.swift in Sources */,
 				AA16139B26BE772E00DCF027 /* Arm64DDC.swift in Sources */,
@@ -956,7 +944,6 @@
 				45A874812F57DC39009829E8 /* LayoutManager.swift in Sources */,
 				45A874822F57DC39009829E8 /* Arm64DDC.swift in Sources */,
 				45A874832F57DC39009829E8 /* Command.swift in Sources */,
-				45A874842F57DC39009829E8 /* UpdaterDelegate.swift in Sources */,
 				AACE5E2327050C63006C2A48 /* NSNotification+Extension.swift in Sources */,
 				AA25F6CF26E680510087F3A2 /* MenuslidersPrefsViewController.swift in Sources */,
 				AA4398A926DD55DA00943F16 /* IntelDDC.swift in Sources */,
@@ -1454,14 +1441,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		AA70817A27046B9800CC5625 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/sparkle-project/Sparkle";
-			requirement = {
-				branch = 2.x;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1479,11 +1458,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA44E701270377C200E06865 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
-		};
-		AA70817B27046B9800CC5625 /* Sparkle */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA70817A27046B9800CC5625 /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
 		};
 		AAD7DD332CAFF3D90062822F /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;

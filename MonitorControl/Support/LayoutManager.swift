@@ -51,18 +51,27 @@ class LayoutManager {
         }
     }
     
+    func clearActiveLayout() {
+        activeLayout = nil
+        prefs.removeObject(forKey: activeLayoutIdKey)
+    }
+
     func saveCurrentLayout(name: String) -> DisplayLayout {
         let onlineDisplayIDs = DisplayConnectionManager.shared.getOnlineDisplayIDs()
         let activeDisplayIDs = DisplayConnectionManager.shared.getActiveDisplayIDs()
-        
+        let disconnectedDisplayIDs = DisplayConnectionManager.shared.getDisconnectedDisplayIDs()
+        let allKnownDisplayIDs = Set(onlineDisplayIDs).union(disconnectedDisplayIDs)
+
         var displayStates: [DisplayState] = []
-        for displayID in onlineDisplayIDs {
+        for displayID in allKnownDisplayIDs {
             let isEnabled = activeDisplayIDs.contains(displayID)
             displayStates.append(DisplayState(displayID: displayID, isEnabled: isEnabled))
         }
-        
+
         let layout = DisplayLayout(name: name, displayStates: displayStates)
         layouts.append(layout)
+        activeLayout = layout
+        prefs.set(layout.id.uuidString, forKey: activeLayoutIdKey)
         saveLayouts()
         os_log("Saved new layout '%{public}@' with %d displays", type: .info, name, displayStates.count)
         return layout
@@ -92,29 +101,31 @@ class LayoutManager {
     
     func applyLayout(_ layout: DisplayLayout) throws {
         os_log("Applying layout '%{public}@'", type: .info, layout.name)
-        
+
         let onlineDisplayIDs = DisplayConnectionManager.shared.getOnlineDisplayIDs()
-        
+        let disconnectedDisplayIDs = DisplayConnectionManager.shared.getDisconnectedDisplayIDs()
+        let allKnownDisplayIDs = Set(onlineDisplayIDs).union(disconnectedDisplayIDs)
+
         var layoutToApply = layout
         layoutToApply.updateLastUsed()
         if let index = layouts.firstIndex(where: { $0.id == layout.id }) {
             layouts[index] = layoutToApply
             saveLayouts()
         }
-        
-        for displayID in onlineDisplayIDs {
+
+        for displayID in allKnownDisplayIDs {
             guard let displayState = layout.getDisplayState(for: displayID) else {
                 os_log("Display %u not found in layout, enabling by default", type: .info, displayID)
                 try DisplayConnectionManager.shared.reconnectDisplay(displayID)
                 continue
             }
-            
+
             try DisplayConnectionManager.shared.setDisplayEnabled(displayID, enabled: displayState.isEnabled)
         }
-        
+
         activeLayout = layoutToApply
         prefs.set(layout.id.uuidString, forKey: activeLayoutIdKey)
-        
+
         os_log("Successfully applied layout '%{public}@'", type: .info, layout.name)
     }
     

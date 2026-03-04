@@ -225,7 +225,68 @@ class MenuHandler: NSMenu, NSMenuDelegate {
     }
   }
 
+  func addDisplayToggleSubmenu() {
+    let displaysMenuItem = NSMenuItem(title: NSLocalizedString("Displays", comment: "Shown in menu"), action: nil, keyEquivalent: "")
+    let displaysSubmenu = NSMenu()
+
+    let onlineDisplayIDs = DisplayConnectionManager.shared.getOnlineDisplayIDs()
+    let activeDisplayIDs = DisplayConnectionManager.shared.getActiveDisplayIDs()
+
+    for displayID in onlineDisplayIDs {
+      let isActive = activeDisplayIDs.contains(displayID)
+      let name = DisplayManager.getDisplayNameByID(displayID: displayID)
+
+      let item = NSMenuItem(title: name, action: #selector(self.toggleDisplayEnabled(_:)), keyEquivalent: "")
+      item.representedObject = NSNumber(value: displayID)
+      item.target = self
+      item.state = isActive ? .on : .off
+      if activeDisplayIDs.count <= 1, isActive {
+        item.isEnabled = false
+      }
+      displaysSubmenu.addItem(item)
+    }
+
+    if !onlineDisplayIDs.isEmpty {
+      displaysSubmenu.addItem(NSMenuItem.separator())
+      let reconnectItem = NSMenuItem(title: NSLocalizedString("Reconnect All", comment: "Shown in menu"), action: #selector(self.reconnectAllDisplays), keyEquivalent: "")
+      reconnectItem.target = self
+      displaysSubmenu.addItem(reconnectItem)
+    }
+
+    displaysMenuItem.submenu = displaysSubmenu
+    self.insertItem(displaysMenuItem, at: self.items.count)
+  }
+
+  @objc func toggleDisplayEnabled(_ sender: NSMenuItem) {
+    guard let displayID = (sender.representedObject as? NSNumber)?.uint32Value else { return }
+    let isActive = DisplayConnectionManager.shared.isDisplayActive(displayID)
+    do {
+      try DisplayConnectionManager.shared.setDisplayEnabled(displayID, enabled: !isActive)
+      LayoutManager.shared.clearActiveLayout()
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        app.configure()
+        self.updateMenus()
+      }
+    } catch {
+      os_log("Failed to toggle display %u: %{public}@", type: .error, displayID, error.localizedDescription)
+      let alert = NSAlert()
+      alert.messageText = NSLocalizedString("Failed to toggle display", comment: "Alert title")
+      alert.informativeText = error.localizedDescription
+      alert.runModal()
+    }
+  }
+
+  @objc func reconnectAllDisplays() {
+    DisplayConnectionManager.shared.resetAllDisplays()
+    LayoutManager.shared.clearActiveLayout()
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      app.configure()
+      self.updateMenus()
+    }
+  }
+
   func addDefaultMenuOptions() {
+    self.addDisplayToggleSubmenu()
     self.addLayoutsSubmenu()
     if !DEBUG_MACOS10, #available(macOS 11.0, *), prefs.integer(forKey: PrefKey.menuItemStyle.rawValue) == MenuItemStyle.icon.rawValue {
       let iconSize = CGFloat(18)
@@ -244,29 +305,15 @@ class MenuHandler: NSMenu, NSMenuDelegate {
       settingsIcon.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: NSLocalizedString("Settings…", comment: "Shown in menu"))
       settingsIcon.alternateImage = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: NSLocalizedString("Settings…", comment: "Shown in menu"))
       settingsIcon.alphaValue = 0.3
-      settingsIcon.frame = NSRect(x: menuItemView.frame.maxX - iconSize * 3 - 20 - 17 + compensateForBlock, y: menuItemView.frame.origin.y + 5, width: iconSize, height: iconSize)
+      settingsIcon.frame = NSRect(x: menuItemView.frame.maxX - iconSize * 2 - 14 - 17 + compensateForBlock, y: menuItemView.frame.origin.y + 5, width: iconSize, height: iconSize)
       settingsIcon.imageScaling = .scaleProportionallyUpOrDown
       settingsIcon.action = #selector(app.prefsClicked)
-
-      let updateIcon = NSButton()
-      updateIcon.bezelStyle = .regularSquare
-      updateIcon.isBordered = false
-      updateIcon.setButtonType(.momentaryChange)
-      var symbolName = prefs.bool(forKey: PrefKey.showTickMarks.rawValue) ? "arrow.left.arrow.right.square" : "arrow.triangle.2.circlepath.circle"
-      updateIcon.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: NSLocalizedString("Check for updates…", comment: "Shown in menu"))
-      updateIcon.alternateImage = NSImage(systemSymbolName: symbolName + ".fill", accessibilityDescription: NSLocalizedString("Check for updates…", comment: "Shown in menu"))
-
-      updateIcon.alphaValue = 0.3
-      updateIcon.frame = NSRect(x: menuItemView.frame.maxX - iconSize * 2 - 14 - 17 + compensateForBlock, y: menuItemView.frame.origin.y + 5, width: iconSize, height: iconSize)
-      updateIcon.imageScaling = .scaleProportionallyUpOrDown
-      updateIcon.action = #selector(app.updaterController.checkForUpdates(_:))
-      updateIcon.target = app.updaterController
 
       let quitIcon = NSButton()
       quitIcon.bezelStyle = .regularSquare
       quitIcon.isBordered = false
       quitIcon.setButtonType(.momentaryChange)
-      symbolName = prefs.bool(forKey: PrefKey.showTickMarks.rawValue) ? "multiply.square" : "xmark.circle"
+      var symbolName = prefs.bool(forKey: PrefKey.showTickMarks.rawValue) ? "multiply.square" : "xmark.circle"
       quitIcon.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: NSLocalizedString("Quit", comment: "Shown in menu"))
       quitIcon.alternateImage = NSImage(systemSymbolName: symbolName + ".fill", accessibilityDescription: NSLocalizedString("Quit", comment: "Shown in menu"))
       quitIcon.alphaValue = 0.3
@@ -275,7 +322,6 @@ class MenuHandler: NSMenu, NSMenuDelegate {
       quitIcon.action = #selector(app.quitClicked)
 
       menuItemView.addSubview(settingsIcon)
-      menuItemView.addSubview(updateIcon)
       menuItemView.addSubview(quitIcon)
       let item = NSMenuItem()
       item.view = menuItemView
@@ -285,9 +331,6 @@ class MenuHandler: NSMenu, NSMenuDelegate {
         self.insertItem(NSMenuItem.separator(), at: self.items.count)
       }
       self.insertItem(withTitle: NSLocalizedString("Settings…", comment: "Shown in menu"), action: #selector(app.prefsClicked), keyEquivalent: ",", at: self.items.count)
-      let updateItem = NSMenuItem(title: NSLocalizedString("Check for updates…", comment: "Shown in menu"), action: #selector(app.updaterController.checkForUpdates(_:)), keyEquivalent: "")
-      updateItem.target = app.updaterController
-      self.insertItem(updateItem, at: self.items.count)
       self.insertItem(withTitle: NSLocalizedString("Quit", comment: "Shown in menu"), action: #selector(app.quitClicked), keyEquivalent: "q", at: self.items.count)
     }
   }
@@ -355,6 +398,13 @@ class MenuHandler: NSMenu, NSMenuDelegate {
     if response == .alertFirstButtonReturn {
       let name = textField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
       guard !name.isEmpty else { return }
+      if LayoutManager.shared.layouts.contains(where: { $0.name == name }) {
+        let dupeAlert = NSAlert()
+        dupeAlert.messageText = NSLocalizedString("Name Already Exists", comment: "Alert title")
+        dupeAlert.informativeText = String(format: NSLocalizedString("A layout named '%@' already exists. Please choose a different name.", comment: "Alert message"), name)
+        dupeAlert.runModal()
+        return
+      }
       _ = LayoutManager.shared.saveCurrentLayout(name: name)
       self.updateMenus()
     }

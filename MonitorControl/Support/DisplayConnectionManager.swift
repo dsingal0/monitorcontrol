@@ -95,48 +95,44 @@ class DisplayConnectionManager {
             throw DisplayConnectionError.configureFailed(displayID: displayID)
         }
         
-        let completeStatus = CGCompleteDisplayConfiguration(config, .forAppOnly)
+        let completeStatus = CGCompleteDisplayConfiguration(config, .permanently)
         guard completeStatus == .success else {
             os_log("Failed to complete display configuration for disconnect", type: .error)
             throw DisplayConnectionError.completeConfigurationFailed
         }
-        
+
         disconnectedDisplays.insert(displayID)
         os_log("Successfully disconnected display %u", type: .info, displayID)
     }
     
     func reconnectDisplay(_ displayID: CGDirectDisplayID) throws {
-        guard isDisplayOnline(displayID) else {
-            os_log("Display %u is not online, cannot reconnect", type: .info, displayID)
-            return
-        }
-        
         guard !isDisplayActive(displayID) else {
             os_log("Display %u is already active", type: .info, displayID)
+            disconnectedDisplays.remove(displayID)
             return
         }
-        
+
         var configRef: CGDisplayConfigRef?
         let beginStatus = CGBeginDisplayConfiguration(&configRef)
-        
+
         guard beginStatus == .success, let config = configRef else {
             os_log("Failed to begin display configuration for reconnect", type: .error)
             throw DisplayConnectionError.beginConfigurationFailed
         }
-        
+
         let status = CGSConfigureDisplayEnabled(config, displayID, true)
         guard status == 0 else {
             CGCancelDisplayConfiguration(config)
             os_log("Failed to reconnect display %u, status: %d", type: .error, displayID, status)
             throw DisplayConnectionError.configureFailed(displayID: displayID)
         }
-        
-        let completeStatus = CGCompleteDisplayConfiguration(config, .forAppOnly)
+
+        let completeStatus = CGCompleteDisplayConfiguration(config, .permanently)
         guard completeStatus == .success else {
             os_log("Failed to complete display configuration for reconnect", type: .error)
             throw DisplayConnectionError.completeConfigurationFailed
         }
-        
+
         disconnectedDisplays.remove(displayID)
         os_log("Successfully reconnected display %u", type: .info, displayID)
     }
@@ -151,14 +147,31 @@ class DisplayConnectionManager {
     
     func resetAllDisplays() {
         os_log("Resetting all displays to active state", type: .info)
-        for displayID in disconnectedDisplays {
-            try? reconnectDisplay(displayID)
-        }
+        let toReconnect = Array(disconnectedDisplays)
         disconnectedDisplays.removeAll()
+
+        guard !toReconnect.isEmpty else { return }
+
+        var configRef: CGDisplayConfigRef?
+        guard CGBeginDisplayConfiguration(&configRef) == .success, let config = configRef else {
+            os_log("Failed to begin display configuration for reset", type: .error)
+            return
+        }
+
+        for displayID in toReconnect {
+            let status = CGSConfigureDisplayEnabled(config, displayID, true)
+            os_log("Re-enabling display %u, status: %d", type: .info, displayID, status)
+        }
+
+        let result = CGCompleteDisplayConfiguration(config, .permanently)
+        os_log("Reset all displays result: %d", type: .info, result.rawValue)
         CGDisplayRestoreColorSyncSettings()
-        CGRestorePermanentDisplayConfiguration()
     }
     
+    func getDisconnectedDisplayIDs() -> Set<CGDirectDisplayID> {
+        return disconnectedDisplays
+    }
+
     func getBuiltInDisplayID() -> CGDirectDisplayID? {
         for displayID in getOnlineDisplayIDs() {
             if CGDisplayIsBuiltin(displayID) != 0 {
